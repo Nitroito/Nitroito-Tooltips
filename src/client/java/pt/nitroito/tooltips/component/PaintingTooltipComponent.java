@@ -3,7 +3,7 @@ package pt.nitroito.tooltips.component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -56,21 +56,21 @@ public class PaintingTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         if (this.paintingVariant==null) return;
         int posY = y;
         if (this.paintingVariant.title().isPresent()){
-            graphics.drawString(font, getTitleComponent(), x, posY, -1, true);
+            graphics.text(font, getTitleComponent(), x, posY, -1, true);
             posY += font.lineHeight+1;
         }
-        graphics.drawString(font, getSizeComponent(), x, posY, -1, true);
+        graphics.text(font, getSizeComponent(), x, posY, -1, true);
         posY += font.lineHeight+1;
         if (TooltipsConfig.paintingShowPreview){
             renderPainting(graphics, x, posY);
             posY += this.paintingVariant.height()*PAINTING_SCALE+PAINTING_MARGIN;
         }
         if (this.paintingVariant.author().isPresent() && TooltipsConfig.paintingShowAuthor){
-            graphics.drawString(font, getAuthorComponent(), x, posY, -1, true);
+            graphics.text(font, getAuthorComponent(), x, posY, -1, true);
         }
     }
 
@@ -109,7 +109,7 @@ public class PaintingTooltipComponent implements CustomTooltipComponent {
         return variantData!=null ? variantData.value() : null;
     }
 
-    private void renderPainting(GuiGraphics graphics, int x, int y){
+    private void renderPainting(GuiGraphicsExtractor graphics, int x, int y){
         int paintingWidth = this.paintingVariant.width() * PAINTING_SCALE;
         int paintingHeight = this.paintingVariant.height() * PAINTING_SCALE;
         Identifier textureIdentifier = Identifier.withDefaultNamespace("textures/atlas/paintings.png");

@@ -3,7 +3,7 @@ package pt.nitroito.tooltips.component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.MapRenderer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.state.MapRenderState;
@@ -78,15 +78,15 @@ public class MapTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         if (this.mapSavedData==null) return;
         int posY = y;
-        graphics.drawString(font, getMapIdComponent(), x, posY, -1, true);
+        graphics.text(font, getMapIdComponent(), x, posY, -1, true);
         posY += font.lineHeight+1;
-        graphics.drawString(font, getMapLevelComponent(), x, posY, -1, true);
+        graphics.text(font, getMapLevelComponent(), x, posY, -1, true);
         posY += font.lineHeight+1;
         if (TooltipsConfig.mapShowDimension){
-            graphics.drawString(font, getMapDimensionComponent(), x, posY, -1, true);
+            graphics.text(font, getMapDimensionComponent(), x, posY, -1, true);
             posY += font.lineHeight + 1;
         }
         if (TooltipsConfig.mapShowPreview){
@@ -97,11 +97,11 @@ public class MapTooltipComponent implements CustomTooltipComponent {
             Entry mapMarker = this.mapDecorations.decorations().values().stream().toList().getFirst();
             Identifier markerIcon = Identifier.withDefaultNamespace("map/decorations/"+ mapMarker.type().value().assetId().getPath());
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, markerIcon, x, posY+1, ICON_SIZE, ICON_SIZE);
-            graphics.drawString(font, getMapMarkerComponent(mapMarker), x+ICON_SIZE+ICON_MARGIN, posY+1, -1, true);
+            graphics.text(font, getMapMarkerComponent(mapMarker), x+ICON_SIZE+ICON_MARGIN, posY+1, -1, true);
         }
     }
 
-    private void renderMapPreview(GuiGraphics graphics, int x, int y) {
+    private void renderMapPreview(GuiGraphicsExtractor graphics, int x, int y) {
         Identifier mapBackground = Identifier.withDefaultNamespace("map/map_background_checkerboard");
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, mapBackground, x, y, MAP_BACKGROUND_SIZE, MAP_BACKGROUND_SIZE);
         MapRenderer mapRenderer = Minecraft.getInstance().getMapRenderer();
@@ -111,7 +111,7 @@ public class MapTooltipComponent implements CustomTooltipComponent {
         graphics.pose().pushMatrix();
         graphics.pose().translate(x+MAP_PREVIEW_OFFSET, y+MAP_PREVIEW_OFFSET);
         graphics.pose().scale(mapScale, mapScale);
-        graphics.submitMapRenderState(renderState);
+        graphics.map(renderState);
         graphics.pose().popMatrix();
     }
 

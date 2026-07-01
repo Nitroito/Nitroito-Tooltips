@@ -3,7 +3,7 @@ package pt.nitroito.tooltips.component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -78,11 +78,11 @@ public class EffectsTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         int posY = y;
         int iconOffset = TooltipsConfig.effectsShowIcons ? ICON_SIZE+ICON_MARGIN : 0;
         if (this.effectsList.isEmpty() && providesPotionEffects())
-            graphics.drawString(font, Component.translatable("effect.none").withStyle(ChatFormatting.GRAY), x, posY, -1, true);
+            graphics.text(font, Component.translatable("effect.none").withStyle(ChatFormatting.GRAY), x, posY, -1, true);
         if (!this.effectsList.isEmpty()){
             for (RecordEffect effectEntry : this.effectsList) {
                 MutableComponent effectComponent = getEffectComponent(effectEntry);
@@ -90,22 +90,22 @@ public class EffectsTooltipComponent implements CustomTooltipComponent {
                     Identifier effectIcon = Gui.getMobEffectSprite(effectEntry.effect.getEffect());
                     graphics.blitSprite(RenderPipelines.GUI_TEXTURED, effectIcon, x, posY, ICON_SIZE, ICON_SIZE);
                 }
-                graphics.drawString(font, effectComponent, x+iconOffset, posY, -1, true);
+                graphics.text(font, effectComponent, x+iconOffset, posY, -1, true);
                 posY += font.lineHeight+1;
             }
             if (!this.modifiersList.isEmpty() && TooltipsConfig.effectsShowModifiers) {
                 if (!TooltipsConfig.removeEmptyLines)
                     posY += font.lineHeight+1;
-                graphics.drawString(font, Component.translatable("potion.whenDrank").withStyle(ChatFormatting.GRAY), x, posY, -1, true);
+                graphics.text(font, Component.translatable("potion.whenDrank").withStyle(ChatFormatting.GRAY), x, posY, -1, true);
                 posY += font.lineHeight+1;
                 for (RecordModifier modifierEntry : this.modifiersList) {
                     double amount = modifierEntry.modifier.amount();
                     if (amount > 0.0){
-                        graphics.drawString(font, getModifierComponent(modifierEntry).withStyle(ChatFormatting.BLUE), x, posY, -1, true);
+                        graphics.text(font, getModifierComponent(modifierEntry).withStyle(ChatFormatting.BLUE), x, posY, -1, true);
                         posY += font.lineHeight+1;
                     }
                     if (amount < 0.0) {
-                        graphics.drawString(font, getModifierComponent(modifierEntry).withStyle(ChatFormatting.RED), x, posY, -1, true);
+                        graphics.text(font, getModifierComponent(modifierEntry).withStyle(ChatFormatting.RED), x, posY, -1, true);
                         posY += font.lineHeight+1;
                     }
                 }

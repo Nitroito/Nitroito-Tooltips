@@ -2,7 +2,7 @@ package pt.nitroito.tooltips.component;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
@@ -44,24 +44,24 @@ public class ArmorTrimTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         int posY = y;
         int posX = x + font.width(CommonComponents.space());
         int iconOffset = (TooltipsConfig.armorTrimShowIcons ? ICON_SIZE+ICON_MARGIN : 0);
-        graphics.drawString(font, getHeaderComponent(), x, posY, -1, true);
+        graphics.text(font, getHeaderComponent(), x, posY, -1, true);
         posY += font.lineHeight+1;
         if (TooltipsConfig.armorTrimShowIcons){
             Identifier pattern = Identifier.parse(this.armorTrim.pattern().getRegisteredName());
             Identifier patternIcon = Identifier.withDefaultNamespace("item/"+pattern.getPath()+"_armor_trim_smithing_template");
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, patternIcon, posX, posY, ICON_SIZE, ICON_SIZE);
         }
-        graphics.drawString(font, getPatternComponent(), posX+iconOffset, posY, -1, true);
+        graphics.text(font, getPatternComponent(), posX+iconOffset, posY, -1, true);
         posY += font.lineHeight+1;
         if (TooltipsConfig.armorTrimShowIcons){
             Identifier materialIcon = TooltipsGlobals.TRIM_MATERIALS.get(this.armorTrim.material().getRegisteredName());
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, materialIcon, posX, posY, ICON_SIZE, ICON_SIZE);
         }
-        graphics.drawString(font, getMaterialComponent(), posX+iconOffset, posY, -1, true);
+        graphics.text(font, getMaterialComponent(), posX+iconOffset, posY, -1, true);
     }
 
     private Component getHeaderComponent(){

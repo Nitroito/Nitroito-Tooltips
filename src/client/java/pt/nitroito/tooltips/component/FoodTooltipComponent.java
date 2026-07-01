@@ -2,7 +2,7 @@ package pt.nitroito.tooltips.component;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
@@ -56,14 +56,14 @@ public class FoodTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         int posY = y;
         int posX = x + font.width(getNutritionComponent())+ ICON_MARGIN;
         int foodNutrition = foodProperties.nutrition();
-        graphics.drawString(font, getNutritionComponent(), x, posY, -1, true);
+        graphics.text(font, getNutritionComponent(), x, posY, -1, true);
         if (TooltipsConfig.foodNutritionStyle==TooltipsConfig.FoodNutritionStyle.VALUES) {
             Component valueComponent = Component.literal(FLOAT_FORMAT.format(foodNutrition/2)).withStyle(ChatFormatting.WHITE);
-            graphics.drawString(font, valueComponent, posX, posY, -1, true);
+            graphics.text(font, valueComponent, posX, posY, -1, true);
         }
         if (TooltipsConfig.foodNutritionStyle==TooltipsConfig.FoodNutritionStyle.ICONS) {
             int maxCount =  foodNutrition/2;
@@ -75,7 +75,7 @@ public class FoodTooltipComponent implements CustomTooltipComponent {
                 graphics.blitSprite(RenderPipelines.GUI_TEXTURED, NUTRITION_HALF, posX, y, ICON_SIZE, ICON_SIZE);
         }
         posY += font.lineHeight+1;
-        graphics.drawString(font, getSaturationComponent(), x, posY, -1, true);
+        graphics.text(font, getSaturationComponent(), x, posY, -1, true);
     }
 
     private MutableComponent getNutritionComponent() {

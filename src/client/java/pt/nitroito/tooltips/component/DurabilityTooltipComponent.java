@@ -2,7 +2,7 @@ package pt.nitroito.tooltips.component;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -52,7 +52,7 @@ public class DurabilityTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         if (TooltipsConfig.itemDurabilityStyle == TooltipsConfig.ItemDurabilityStyle.HIDDEN) return;
         if (TooltipsConfig.itemDurabilityStyle == TooltipsConfig.ItemDurabilityStyle.VANILLA) return;
 
@@ -60,22 +60,22 @@ public class DurabilityTooltipComponent implements CustomTooltipComponent {
         switch(TooltipsConfig.itemDurabilityStyle){
             case VALUES -> {
                 durabilityComponent.append(Component.literal(" "+String.format("%d / %d", damageLeft, maxDamage)).withStyle(ChatFormatting.GRAY));
-                graphics.drawString(font, durabilityComponent, x, y, -1, true);
+                graphics.text(font, durabilityComponent, x, y, -1, true);
             }
             case FORMATED_VALUES -> {
                 Style durabilityStyle = UtilsMisc.getFormatingStyle(damageLeft, maxDamage, Math.max(10,maxDamage*0.10));
                 Component damageLeftComponent = Component.literal(" "+damageLeft).setStyle(durabilityStyle);
                 Component maxDamageComponent = Component.literal(String.valueOf(maxDamage)).setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD));
                 durabilityComponent.append(damageLeftComponent).append(" §7/ ").append(maxDamageComponent);
-                graphics.drawString(font, durabilityComponent, x, y, -1, true);
+                graphics.text(font, durabilityComponent, x, y, -1, true);
             }
             case PERCENTAGE -> {
                 Style durabilityStyle = UtilsMisc.getFormatingStyle(damageLeft, maxDamage, Math.max(10,maxDamage*0.10));
                 durabilityComponent.append(Component.literal(" "+PERCENTAGE.format((float)damageLeft/maxDamage)).setStyle(durabilityStyle));
-                graphics.drawString(font, durabilityComponent, x, y, -1, true);
+                graphics.text(font, durabilityComponent, x, y, -1, true);
             }
             case BAR -> {
-                graphics.drawString(font, durabilityComponent, x, y, -1, true);
+                graphics.text(font, durabilityComponent, x, y, -1, true);
                 int barHeight = font.lineHeight-1;
                 int x1 = x + font.width(durabilityComponent)+2;
                 int x2 = x1 + BAR_WIDTH;
@@ -83,7 +83,7 @@ public class DurabilityTooltipComponent implements CustomTooltipComponent {
                 int offset = Math.round(((float)damageLeft/maxDamage)*BAR_WIDTH);
                 UtilsGraphics.horizontalGradient(graphics, x1, y, BAR_WIDTH, barHeight, UtilsGraphics.RED, UtilsGraphics.ORANGE, UtilsGraphics.GREEN);
                 graphics.fill(x1+offset, y, x2, y2, 0xFF111111);
-                graphics.renderOutline(x1, y, BAR_WIDTH, barHeight, DyeColor.LIGHT_GRAY.getTextColor());
+                graphics.outline(x1, y, BAR_WIDTH, barHeight, DyeColor.LIGHT_GRAY.getTextColor());
             }
         }
     }

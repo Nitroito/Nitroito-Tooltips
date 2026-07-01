@@ -2,7 +2,7 @@ package pt.nitroito.tooltips.component;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
@@ -61,19 +61,19 @@ public class BeesTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         Integer propertyValue = honey.get(BlockStateProperties.LEVEL_HONEY);
         int beeCount = this.bees.size();
         int honeyLevel = propertyValue!=null ? propertyValue : 0;
         int x1 = x + font.width(getBeeCountComponent())+ ICON_MARGIN;
         int x2 = x + font.width(getHoneyLevelComponent())+ ICON_MARGIN;
         int y2 = y+font.lineHeight+1;
-        graphics.drawString(font, getBeeCountComponent(), x, y, -1, true);
-        graphics.drawString(font, getHoneyLevelComponent(), x, y2, -1, true);
+        graphics.text(font, getBeeCountComponent(), x, y, -1, true);
+        graphics.text(font, getHoneyLevelComponent(), x, y2, -1, true);
 
         if (TooltipsConfig.beeInformationStyle==TooltipsConfig.BeeInformationStyle.FORMATED_VALUES) {
-            graphics.drawString(font, getValueComponent(beeCount, MAX_BEE_COUNT), x1, y, -1, true);
-            graphics.drawString(font, getValueComponent(honeyLevel, MAX_HONEY_LEVELS), x2, y2, -1, true);
+            graphics.text(font, getValueComponent(beeCount, MAX_BEE_COUNT), x1, y, -1, true);
+            graphics.text(font, getValueComponent(honeyLevel, MAX_HONEY_LEVELS), x2, y2, -1, true);
         }
         if (TooltipsConfig.beeInformationStyle==TooltipsConfig.BeeInformationStyle.ICONS) {
             for (int i=0; i<MAX_BEE_COUNT; i++)

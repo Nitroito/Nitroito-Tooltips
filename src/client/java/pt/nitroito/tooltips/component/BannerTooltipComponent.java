@@ -3,7 +3,7 @@ package pt.nitroito.tooltips.component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
@@ -65,13 +65,13 @@ public class BannerTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         int posY = y;
         if (this.baseColor!=null){
             int posX = x;
             //TEXT: Base
             MutableComponent componentBase = Component.translatable(Tooltips.MOD_ID+".tooltip.banner.base").append(": ");
-            graphics.drawString(font, componentBase.withStyle(ChatFormatting.GRAY), posX, posY, -1, true);
+            graphics.text(font, componentBase.withStyle(ChatFormatting.GRAY), posX, posY, -1, true);
             posX += font.width(componentBase);
             //SPRITE: Banner
             if (TooltipsConfig.bannerPatternShowIcons) {
@@ -85,16 +85,16 @@ public class BannerTooltipComponent implements CustomTooltipComponent {
                 int bannerColor = this.baseColor.getTextColor();
                 if (this.baseColor.equals(DyeColor.GREEN)) bannerColor = UtilsGraphics.DARK_GREEN;
                 if (this.baseColor.equals(DyeColor.BLACK)) bannerColor = UtilsGraphics.LIGHT_BLACK;
-                graphics.drawString(font, componentBannerName.withColor(bannerColor), posX, posY, -1, true);
+                graphics.text(font, componentBannerName.withColor(bannerColor), posX, posY, -1, true);
             }
             if (TooltipsConfig.bannerPatternStyle==TooltipsConfig.BannerPatternStyle.PLAIN_TEXT)
-                graphics.drawString(font, componentBannerName.withStyle(ChatFormatting.GRAY), posX, posY, -1, true);
+                graphics.text(font, componentBannerName.withStyle(ChatFormatting.GRAY), posX, posY, -1, true);
             posY += font.lineHeight+1;
         }
 
         if (!this.bannerLayers.isEmpty()){
             Component layersTitle = Component.translatable(Tooltips.MOD_ID+".tooltip.banner.layers").withStyle(ChatFormatting.GRAY);
-            graphics.drawString(font, layersTitle, x, posY, -1, true);
+            graphics.text(font, layersTitle, x, posY, -1, true);
             posY += font.lineHeight+1;
             for (Layer layer: this.bannerLayers){
                 int posX = x;
@@ -114,10 +114,10 @@ public class BannerTooltipComponent implements CustomTooltipComponent {
                     int layerColor = layer.color().getTextColor();
                     if (layer.color().equals(DyeColor.GREEN)) layerColor = UtilsGraphics.DARK_GREEN;
                     if (layer.color().equals(DyeColor.BLACK)) layerColor = UtilsGraphics.LIGHT_BLACK;
-                    graphics.drawString(font, layer.description().withColor(layerColor), posX, posY, -1, true);
+                    graphics.text(font, layer.description().withColor(layerColor), posX, posY, -1, true);
                 }
                 if (TooltipsConfig.bannerPatternStyle==TooltipsConfig.BannerPatternStyle.PLAIN_TEXT)
-                    graphics.drawString(font, layer.description().withStyle(ChatFormatting.GRAY), posX, posY, -1, true);
+                    graphics.text(font, layer.description().withStyle(ChatFormatting.GRAY), posX, posY, -1, true);
                 posY += font.lineHeight+1;
             }
         }

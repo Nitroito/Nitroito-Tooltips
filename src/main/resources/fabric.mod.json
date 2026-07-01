@@ -19,12 +19,12 @@
     ],
     "modmenu": ["pt.nitroito.tooltips.config.ModMenuIntegration"]
   },
-  "accessWidener": "nitroito_tooltips.accesswidener",
+  "accessWidener": "nitroito_tooltips.classtweaker",
   "mixins": ["nitroito_tooltips.mixins.json"],
   "depends": {
     "minecraft": ">=${minecraft_version}",
     "fabricloader": ">=${loader_version}",
-    "java": ">=21",
+    "java": ">=25",
     "fabric-api": "*"
   }
 }

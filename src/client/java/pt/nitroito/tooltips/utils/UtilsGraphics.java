@@ -1,7 +1,7 @@
 package pt.nitroito.tooltips.utils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
@@ -16,7 +16,7 @@ public class UtilsGraphics {
     public static final int LIGHT_BLACK = 0xFF222222;
 
 
-    public static void horizontalGradient(GuiGraphics graphics, int x, int y, int width, int height, int color1, int color2, int color3) {
+    public static void horizontalGradient(GuiGraphicsExtractor graphics, int x, int y, int width, int height, int color1, int color2, int color3) {
         for (int i = 0; i < width; i++) {
             float step = (float) i / (width - 1);
             int gradientColor = getGradientColor(step, color1, color2, color3);
@@ -24,13 +24,13 @@ public class UtilsGraphics {
         }
     }
 
-    public static void renderEntityModel(GuiGraphics graphics, Entity model, float scale, Quaternionf rotation, boolean useAnimation, int x, int y, int w, int h){
+    public static void renderEntityModel(GuiGraphicsExtractor graphics, Entity model, float scale, Quaternionf rotation, boolean useAnimation, int x, int y, int w, int h){
         model.setYRot(0);
         model.setYBodyRot(0);
         model.setYHeadRot(0);
         float ticks = useAnimation ? (System.currentTimeMillis() % 100000L)/50.0f : 0;
         EntityRenderState renderState = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(model).createRenderState(model, ticks);
-        graphics.submitEntityRenderState(renderState, scale, new Vector3f(), rotation, null, x, y, x+w, y+h);
+        graphics.entity(renderState, scale, new Vector3f(), rotation, null, x, y, x+w, y+h);
     }
 
     private static int getGradientColor(float step, int color1, int color2, int color3) {

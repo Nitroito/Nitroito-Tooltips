@@ -1,7 +1,7 @@
 package pt.nitroito.tooltips.mixin;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
@@ -21,10 +21,10 @@ import pt.nitroito.tooltips.utils.UtilsMisc;
 import java.util.List;
 
 
-@Mixin(GuiGraphics.class)
-public abstract class GuiGraphicsMixin {
-    @Inject(method = "renderTooltip", at = @At("HEAD"))
-    private void renderTooltip(Font textRenderer, List<ClientTooltipComponent> components, int x, int y, ClientTooltipPositioner positioner, @Nullable Identifier texture, CallbackInfo ci) {
+@Mixin(GuiGraphicsExtractor.class)
+public abstract class GuiGraphicsExtractorMixin {
+    @Inject(method = "tooltip", at = @At("HEAD"))
+    private void tooltip(Font textRenderer, List<ClientTooltipComponent> components, int x, int y, ClientTooltipPositioner positioner, @Nullable Identifier texture, CallbackInfo ci) {
         if (components == null || components.isEmpty() || TooltipsGlobals.getStack().isEmpty()) return;
         ItemStack currentStack =  TooltipsGlobals.getStack();
         Component headerComponent = ClientTextTooltipVisitor.getComponent(((ClientTextTooltip)components.getFirst()).text);
@@ -75,7 +75,7 @@ public abstract class GuiGraphicsMixin {
                 components.add(1, new DurabilityTooltipComponent(currentStack));
             // FOOTER
             components.add(new FooterTooltipComponent(currentStack));
-        }catch (Exception ignored){}
+        }catch (Exception _){}
         TooltipsGlobals.setStack(ItemStack.EMPTY);
     }
 }

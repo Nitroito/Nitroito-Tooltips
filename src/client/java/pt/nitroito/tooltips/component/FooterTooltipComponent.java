@@ -2,7 +2,7 @@ package pt.nitroito.tooltips.component;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -51,23 +51,23 @@ public class FooterTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         int posY = y + (USE_LINE_SPACER ? font.lineHeight : 0);
 
         if (includeItemDurability()) {
-            graphics.drawString(font, itemDurability, x, posY, -1, true);
+            graphics.text(font, itemDurability, x, posY, -1, true);
             posY += font.lineHeight + 1;
         }
         if (includeItemIdentifier()) {
-            graphics.drawString(font, itemIdentifier.withStyle(ChatFormatting.DARK_GRAY), x, posY, -1, true);
+            graphics.text(font, itemIdentifier.withStyle(ChatFormatting.DARK_GRAY), x, posY, -1, true);
             posY += font.lineHeight + 1;
         }
         if (includeComponentCount()) {
-            graphics.drawString(font, itemComponents.withStyle(ChatFormatting.DARK_GRAY), x, posY, -1, true);
+            graphics.text(font, itemComponents.withStyle(ChatFormatting.DARK_GRAY), x, posY, -1, true);
             posY += font.lineHeight + 1;
         }
         if (includeModDisplayName()) {
-            graphics.drawString(font, modDisplayName.withStyle(Style.EMPTY.withColor(ChatFormatting.BLUE)), x, posY, -1, true);
+            graphics.text(font, modDisplayName.withStyle(Style.EMPTY.withColor(ChatFormatting.BLUE)), x, posY, -1, true);
         }
     }
 

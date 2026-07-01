@@ -2,7 +2,7 @@ package pt.nitroito.tooltips.component;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -67,28 +67,28 @@ public class BucketEntityTooltipComponent implements CustomTooltipComponent {
     }
 
     @Override
-    public void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int w, int h) {
+    public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         if (this.entityData.isEmpty()) return;
 
         int posY = y;
         if (this.entityModel==BucketEntityModel.AXOLOTL){
-            graphics.drawString(font, getAxolotlVariantComponent(), x, posY, -1, true);
+            graphics.text(font, getAxolotlVariantComponent(), x, posY, -1, true);
             posY += font.lineHeight+1;
         }
         if (this.entityModel==BucketEntityModel.SALMON){
-            graphics.drawString(font, getSalmonVariantComponent(), x, posY, -1, true);
+            graphics.text(font, getSalmonVariantComponent(), x, posY, -1, true);
             posY += font.lineHeight+1;
         }
         if (this.entityModel.isTropicalFish()) {
             if (!getTropicalFishVariantComponent().getString().isEmpty()) {
-                graphics.drawString(font, getTropicalFishVariantComponent(), x, posY, -1, true);
+                graphics.text(font, getTropicalFishVariantComponent(), x, posY, -1, true);
                 posY += font.lineHeight+1;
             }
-            graphics.drawString(font, getTropicalFishPatternComponent(), x, posY, -1, true);
+            graphics.text(font, getTropicalFishPatternComponent(), x, posY, -1, true);
             posY += font.lineHeight+1;
         }
         if (getBucketEntityCooldown()!=0){
-            graphics.drawString(font, getBucketEntityCooldownComponent(), x, posY, -1, true);
+            graphics.text(font, getBucketEntityCooldownComponent(), x, posY, -1, true);
             posY += font.lineHeight+1;
         }
         if (TooltipsConfig.bucketEntityStyle==TooltipsConfig.BucketEntityStyle.VISIBLE_WITH_MODEL){

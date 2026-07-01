@@ -1,7 +1,7 @@
 package pt.nitroito.tooltips.model;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -26,7 +26,7 @@ public enum BucketEntityModel {
     COD (3, 1.00f, 1.40f, 1.00f),
     PUFFERFISH (4, 0.80f, 1.20f, 1.80f),
     SALMON (4, 0.90f, 2.00f, 1.10f),
-    TADPOLE (3, 1.00f, 1.00f, 2.00f),
+    TADPOLE (3, 1.00f, 1.00f, 1.50f),
     TROPICAL_FISH_LARGE (4, 1.00f, 1.20f, 1.20f),
     TROPICAL_FISH_SMALL (3, 1.00f, 1.20f, 1.00f);
 
@@ -99,7 +99,7 @@ public enum BucketEntityModel {
         return null;
     }
 
-    public void renderModel(GuiGraphics graphics, ItemStack stack, boolean isBaby, long referenceTimeMillis, int x, int y){
+    public void renderModel(GuiGraphicsExtractor graphics, ItemStack stack, boolean isBaby, long referenceTimeMillis, int x, int y){
         Entity entityModel = this.createModel(stack);
         if (entityModel instanceof Mob mob) mob.setBaby(isBaby);
         Quaternionf modelRotation = TooltipsConfig.bucketEntityRotate ? this.rotatedPose(referenceTimeMillis) : this.staticPose();

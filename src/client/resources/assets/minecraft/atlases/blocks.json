@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:directory",
+      "prefix": "icon/",
+      "source": "icon"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "banner/",
+      "source": "banner"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "banner_pattern/",
+      "source": "banner_pattern"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "item/",
+      "source": "item"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "map/",
+      "source": "map"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+accessWidener v1 named
+
+accessible field net/minecraft/client/gui/screens/inventory/tooltip/ClientTextTooltip text Lnet/minecraft/util/FormattedCharSequence;
+accessible field net/minecraft/world/item/ItemStack components Lnet/minecraft/core/component/PatchedDataComponentMap;
+accessible field net/minecraft/world/item/MobBucketItem type Lnet/minecraft/world/entity/EntityType;
+accessible field net/minecraft/world/entity/animal/fish/Pufferfish PUFF_STATE Lnet/minecraft/network/syncher/EntityDataAccessor;
+accessible field net/minecraft/world/item/HangingEntityItem type Lnet/minecraft/world/entity/EntityType;

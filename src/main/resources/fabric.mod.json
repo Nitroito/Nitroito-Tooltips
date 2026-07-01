@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "nitroito_tooltips",
+  "version": "${version}",
+  "name": "${author} ${name}",
+  "description": "${description}",
+  "authors": ["${author}"],
+  "icon": "assets/nitroito_tooltips/icon.png",
+  "contact": {
+      "homepage": "https://modrinth.com/mod/nitroito-tooltips",
+      "sources": "https://github.com/Nitroito/Nitroito-Tooltips",
+      "issues": "https://github.com/Nitroito/Nitroito-Tooltips/issues"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "pt.nitroito.tooltips.Tooltips"
+    ],
+    "modmenu": ["pt.nitroito.tooltips.config.ModMenuIntegration"]
+  },
+  "accessWidener": "nitroito_tooltips.accesswidener",
+  "mixins": ["nitroito_tooltips.mixins.json"],
+  "depends": {
+    "minecraft": ">=${minecraft_version}",
+    "fabricloader": ">=${loader_version}",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "pt.nitroito.tooltips.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ArmorTrimMixin",
+    "BannerPatternLayersMixin",
+    "BeesMixin",
+    "BlockItemStatePropertiesMixin",
+    "GuiGraphicsMixin",
+    "HangingEntityItemMixin",
+    "ItemEnchantmentsMixin",
+    "ItemStackMixin",
+    "MapIdMixin",
+    "OminousBottleAmplifierMixin",
+    "PotionContentsMixin",
+    "SuspiciousStewEffectsMixin",
+    "TropicalFishPatternMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

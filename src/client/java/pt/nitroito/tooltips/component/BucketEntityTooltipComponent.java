@@ -3,20 +3,28 @@ package pt.nitroito.tooltips.component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.SulfurCubeArchetype;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.animal.fish.*;
 import net.minecraft.world.entity.animal.frog.Tadpole;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.SulfurCubeContent;
 import org.jetbrains.annotations.NotNull;
 import pt.nitroito.tooltips.Tooltips;
 import pt.nitroito.tooltips.TooltipsConfig;
+import pt.nitroito.tooltips.TooltipsGlobals;
 import pt.nitroito.tooltips.model.BucketEntityModel;
 import pt.nitroito.tooltips.utils.UtilsString;
+
+import java.util.List;
 
 
 public class BucketEntityTooltipComponent implements CustomTooltipComponent {
@@ -37,9 +45,14 @@ public class BucketEntityTooltipComponent implements CustomTooltipComponent {
         if (this.entityData.isEmpty()) return result;
         if (this.entityModel==BucketEntityModel.AXOLOTL || this.entityModel==BucketEntityModel.SALMON)
             result += font.lineHeight+1;
-        if (this.entityModel.isTropicalFish()) {
-            result += (!getTropicalFishVariantComponent().getString().isEmpty() ? font.lineHeight+1 : 0) + font.lineHeight+1;
+        if (this.entityModel==BucketEntityModel.SULFUR_CUBE) {
+            if (!getSulfurCubeContentComponent().getString().isEmpty())
+                result += font.lineHeight + 1;
+            if (!getSulfurCubeArchetypeComponent().getString().isEmpty())
+                result += font.lineHeight + 1;
         }
+        if (this.entityModel.isTropicalFish())
+            result += (!getTropicalFishVariantComponent().getString().isEmpty() ? font.lineHeight+1 : 0) + font.lineHeight+1;
         if (getBucketEntityCooldown()!=0)
             result += font.lineHeight+1;
         if (TooltipsConfig.bucketEntityStyle==TooltipsConfig.BucketEntityStyle.VISIBLE_WITH_MODEL){
@@ -56,6 +69,12 @@ public class BucketEntityTooltipComponent implements CustomTooltipComponent {
         if (this.entityData.isEmpty()) return result;
         if (this.entityModel==BucketEntityModel.AXOLOTL)
             result = Math.max(result, font.width(getAxolotlVariantComponent()));
+        if (this.entityModel==BucketEntityModel.SULFUR_CUBE) {
+            if (!getSulfurCubeContentComponent().getString().isEmpty())
+                result = Math.max(result, font.width(getSulfurCubeContentComponent()));
+            if (!getSulfurCubeArchetypeComponent().getString().isEmpty())
+                result = Math.max(result, font.width(getSulfurCubeArchetypeComponent()));
+        }
         if (this.entityModel.isTropicalFish()) {
             if (getTropicalFishVariantComponent().getString().isEmpty())
                 result = Math.max(result, font.width(getTropicalFishVariantComponent()));
@@ -69,7 +88,6 @@ public class BucketEntityTooltipComponent implements CustomTooltipComponent {
     @Override
     public void renderTooltip(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, int h) {
         if (this.entityData.isEmpty()) return;
-
         int posY = y;
         if (this.entityModel==BucketEntityModel.AXOLOTL){
             graphics.text(font, getAxolotlVariantComponent(), x, posY, -1, true);
@@ -78,6 +96,16 @@ public class BucketEntityTooltipComponent implements CustomTooltipComponent {
         if (this.entityModel==BucketEntityModel.SALMON){
             graphics.text(font, getSalmonVariantComponent(), x, posY, -1, true);
             posY += font.lineHeight+1;
+        }
+        if (this.entityModel==BucketEntityModel.SULFUR_CUBE){
+            if (!getSulfurCubeContentComponent().getString().isEmpty()) {
+                graphics.text(font, getSulfurCubeContentComponent(), x, posY, -1, true);
+                posY += font.lineHeight + 1;
+            }
+            if (!getSulfurCubeArchetypeComponent().getString().isEmpty()) {
+                graphics.text(font, getSulfurCubeArchetypeComponent(), x, posY, -1, true);
+                posY += font.lineHeight + 1;
+            }
         }
         if (this.entityModel.isTropicalFish()) {
             if (!getTropicalFishVariantComponent().getString().isEmpty()) {
@@ -117,6 +145,29 @@ public class BucketEntityTooltipComponent implements CustomTooltipComponent {
         if (salmonVariant==null) return Component.empty();
         MutableComponent result = Component.translatable(Tooltips.MOD_ID+".tooltip.entity.variant").append(": ").withStyle(ChatFormatting.GRAY);
         return result.append(Component.literal(UtilsString.titleCase(salmonVariant.name())).withStyle(ChatFormatting.DARK_AQUA));
+    }
+
+    private MutableComponent getSulfurCubeContentComponent() {
+        SulfurCubeContent sulfurCubeContent = stack.get(DataComponents.SULFUR_CUBE_CONTENT);
+        if (sulfurCubeContent==null) return Component.empty();
+        MutableComponent prefix = Component.translatable(Tooltips.MOD_ID+".tooltip.entity.content").append(": ").withStyle(ChatFormatting.GRAY);
+        MutableComponent value = Component.literal(sulfurCubeContent.absorbedBlockItemStack().create().getHoverName().getString()).withStyle(ChatFormatting.WHITE);
+        return prefix.append(value);
+    }
+
+    private MutableComponent getSulfurCubeArchetypeComponent() {
+        SulfurCubeContent sulfurCubeContent = stack.get(DataComponents.SULFUR_CUBE_CONTENT);
+        if (sulfurCubeContent==null) return Component.empty();
+        ItemStack cubeStack = sulfurCubeContent.absorbedBlockItemStack().create();
+        Registry<SulfurCubeArchetype> archetypes = TooltipsGlobals.getLevel().registryAccess().lookupOrThrow(Registries.SULFUR_CUBE_ARCHETYPE);
+        List<SulfurCubeArchetype> cubeArchetypes = archetypes.stream().filter(arch -> cubeStack.is(arch.items())).toList();
+        Identifier cubeArchetype = archetypes.getKey(cubeArchetypes.getFirst());
+        MutableComponent result = Component.empty();
+        if (cubeArchetype!=null){
+            result.append(Component.translatable(Tooltips.MOD_ID+".tooltip.entity.archetype").append(": ").withStyle(ChatFormatting.GRAY));
+            result.append(Component.literal(UtilsString.titleCase(cubeArchetype.getPath())).withStyle(ChatFormatting.YELLOW));
+        }
+        return result;
     }
 
     private MutableComponent getTropicalFishVariantComponent() {

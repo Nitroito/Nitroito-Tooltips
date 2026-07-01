@@ -1,7 +1,7 @@
 package pt.nitroito.tooltips.mixin;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.HangingEntityItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,8 +23,8 @@ public class HangingEntityItemMixin {
 
     @Inject(method = "appendHoverText",at = @At("HEAD"), cancellable = true)
 	public void appendHoverText(final ItemStack itemStack, final Item.TooltipContext context, final TooltipDisplay display, final Consumer<Component> builder, final TooltipFlag tooltipFlag, CallbackInfo ci) {
-        if (self.type==EntityType.PAINTING && TooltipsConfig.paintingStyle==TooltipsConfig.PaintingStyle.VANILLA) return;
-        if (self.type!=EntityType.PAINTING) return;
+        if (self.type== EntityTypes.PAINTING && TooltipsConfig.paintingStyle==TooltipsConfig.PaintingStyle.VANILLA) return;
+        if (self.type!=EntityTypes.PAINTING) return;
         ci.cancel();
     }
 }

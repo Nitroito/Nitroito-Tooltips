@@ -29,6 +29,7 @@ public class UtilsGraphics {
         model.setYBodyRot(0);
         model.setYHeadRot(0);
         float ticks = useAnimation ? (System.currentTimeMillis() % 100000L)/50.0f : 0;
+        model.setId(-1);
         EntityRenderState renderState = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(model).createRenderState(model, ticks);
         graphics.entity(renderState, scale, new Vector3f(), rotation, null, x, y, x+w, y+h);
     }

@@ -15,6 +15,7 @@
     "MapIdMixin",
     "OminousBottleAmplifierMixin",
     "PotionContentsMixin",
+    "SulfurCubeContentMixin",
     "SuspiciousStewEffectsMixin",
     "TropicalFishPatternMixin"
   ],

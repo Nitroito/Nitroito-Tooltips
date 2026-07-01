@@ -2,13 +2,16 @@ package pt.nitroito.tooltips.component;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -87,7 +90,7 @@ public class EffectsTooltipComponent implements CustomTooltipComponent {
             for (RecordEffect effectEntry : this.effectsList) {
                 MutableComponent effectComponent = getEffectComponent(effectEntry);
                 if (TooltipsConfig.effectsShowIcons) {
-                    Identifier effectIcon = Gui.getMobEffectSprite(effectEntry.effect.getEffect());
+                    Identifier effectIcon = getMobEffectSprite(effectEntry.effect.getEffect());
                     graphics.blitSprite(RenderPipelines.GUI_TEXTURED, effectIcon, x, posY, ICON_SIZE, ICON_SIZE);
                 }
                 graphics.text(font, effectComponent, x+iconOffset, posY, -1, true);
@@ -190,6 +193,10 @@ public class EffectsTooltipComponent implements CustomTooltipComponent {
             }
         }
     }
+
+	public static Identifier getMobEffectSprite(final Holder<MobEffect> effect) {
+		return effect.unwrapKey().map(ResourceKey::identifier).map(id -> id.withPrefix("mob_effect/")).orElseGet(MissingTextureAtlasSprite::getLocation);
+	}
 
     private boolean providesPotionEffects(){
         return this.stack.is(Items.POTION) || this.stack.is(Items.LINGERING_POTION) || this.stack.is(Items.SPLASH_POTION);

@@ -12,6 +12,7 @@ import net.minecraft.world.entity.animal.fish.Pufferfish;
 import net.minecraft.world.entity.animal.fish.Salmon;
 import net.minecraft.world.entity.animal.fish.TropicalFish;
 import net.minecraft.world.entity.animal.frog.Tadpole;
+import net.minecraft.world.entity.monster.cubemob.SulfurCube;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MobBucketItem;
 import org.joml.Quaternionf;
@@ -26,7 +27,8 @@ public enum BucketEntityModel {
     COD (3, 1.00f, 1.40f, 1.00f),
     PUFFERFISH (4, 0.80f, 1.20f, 1.80f),
     SALMON (4, 0.90f, 2.00f, 1.10f),
-    TADPOLE (3, 1.00f, 1.00f, 1.50f),
+    SULFUR_CUBE (4, 1.00f, 1.25f, 1.65f),
+    TADPOLE (3, 1.00f, 1.00f, 2.00f),
     TROPICAL_FISH_LARGE (4, 1.00f, 1.20f, 1.20f),
     TROPICAL_FISH_SMALL (3, 1.00f, 1.20f, 1.00f);
 
@@ -84,6 +86,7 @@ public enum BucketEntityModel {
                 case Cod ignored -> {return COD;}
                 case Pufferfish ignored-> {return PUFFERFISH;}
                 case Salmon ignored -> {return SALMON;}
+                case SulfurCube ignored -> {return SULFUR_CUBE;}
                 case Tadpole ignored-> {return TADPOLE;}
                 case TropicalFish ignored -> {
                     TropicalFish.Pattern fishPattern = stack.get(DataComponents.TROPICAL_FISH_PATTERN);
@@ -93,7 +96,7 @@ public enum BucketEntityModel {
                     else
                         return TROPICAL_FISH_SMALL;
                 }
-                default -> throw new IllegalStateException("Unexpected value: " + entityMob);
+                default -> throw new IllegalStateException("Unexpected value: "+entityMob);
             }
         }
         return null;
@@ -103,8 +106,8 @@ public enum BucketEntityModel {
         Entity entityModel = this.createModel(stack);
         if (entityModel instanceof Mob mob) mob.setBaby(isBaby);
         Quaternionf modelRotation = TooltipsConfig.bucketEntityRotate ? this.rotatedPose(referenceTimeMillis) : this.staticPose();
+        if (!TooltipsConfig.bucketEntityRotate && this==SULFUR_CUBE) modelRotation.rotateY(PI*1.5f);
         boolean useAnimation =  TooltipsConfig.bucketEntityAnimate && (this.isSchoolingFish() || this==BucketEntityModel.TADPOLE);
-
         UtilsGraphics.renderEntityModel(graphics, entityModel, this.scale(), modelRotation, useAnimation, x, y, this.viewportWidth(), this.viewportHeight());
     }
 

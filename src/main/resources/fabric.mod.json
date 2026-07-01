@@ -5,7 +5,7 @@
   "name": "${author} ${name}",
   "description": "${description}",
   "authors": ["${author}"],
-  "icon": "assets/nitroito_tooltips/icon.png",
+  "icon": "icon.png",
   "contact": {
       "homepage": "https://modrinth.com/mod/nitroito-tooltips",
       "sources": "https://github.com/Nitroito/Nitroito-Tooltips",
